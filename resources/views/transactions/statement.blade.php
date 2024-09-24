@@ -36,17 +36,20 @@
             <thead>
                 <tr>
                     <th class="py-2 px-4 bg-gray-200 border border-black">Date</th>
-                    <th class="py-2 px-4 bg-gray-200 border border-black">Type</th>
-                    <th class="py-2 px-4 bg-gray-200 border border-black">Amount</th>
+                    <th class="py-2 px-4 bg-gray-200 border border-black">Total Investment</th>
+                    <th class="py-2 px-4 bg-gray-200 border border-black">Total Profit</th>
+                    <th class="py-2 px-4 bg-gray-200 border border-black">Total Loss</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($transactions as $transaction)
+                @foreach ($transactionsAsDate as $transaction)
                     <tr>
                         <td class="py-2 px-4 border border-black">
-                            {{ Carbon::parse($transaction->date)->format('d M, Y') }}</td>
-                        <td class="py-2 px-4 border border-black">{{ ucfirst($transaction->type) }}</td>
-                        <td class="py-2 px-4 border border-black">{{ $transaction->amount }}</td>
+                            {{ Carbon::parse($transaction['date'])->format('d M, Y') }}
+                        </td>
+                        <td class="py-2 px-4 border border-black">{{ $transaction['fund'] }}</td>
+                        <td class="py-2 px-4 border border-black">{{ $transaction['profit'] }}</td>
+                        <td class="py-2 px-4 border border-black">{{ $transaction['loss'] }}</td>
                     </tr>
                 @endforeach
             </tbody>

@@ -44,7 +44,24 @@ class TransactionController extends Controller
             'loss' => $transactions->where('type', 'loss')->sum('amount'),
         ];
 
-        return view('transactions.statement', compact('transactions', 'summary', 'month'));
+        $transactions = Transaction::whereYear('date', $year)
+            ->whereMonth('date', $monthNumber)
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->date)->format('Y-m-d');
+            });
+
+        $transactionsAsDate = [];
+        foreach ($transactions as $date => $transactionGroup) {
+            $transactionsAsDate[$date] = [
+                'date' => $date,
+                'fund' => $transactionGroup->where('type', 'fund')->sum('amount'),
+                'profit' => $transactionGroup->where('type', 'profit')->sum('amount'),
+                'loss' => $transactionGroup->where('type', 'loss')->sum('amount'),
+            ];
+        }
+
+        return view('transactions.statement', compact('transactions', 'summary', 'transactionsAsDate', 'month'));
     }
 
     public function export($month)
